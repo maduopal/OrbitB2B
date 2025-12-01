@@ -12,22 +12,27 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'], // Font yang lebih "Tech"
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
                         background: '#020204',
                         surface: '#0A0A0C',
-                        primary: '#7c3aed', // Violet 600
-                        primaryGlow: '#8b5cf6', // Violet 500
+                        primary: '#7c3aed',
+                        primaryGlow: '#8b5cf6',
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 0.3s ease-out forwards',
                     },
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -122,7 +127,7 @@
 
             <div class="flex gap-3 items-center">
                 <button class="hidden sm:block text-gray-300 hover:text-white text-sm font-medium px-3 py-2">Sign In</button>
-                <button class="bg-white text-black hover:bg-gray-200 text-sm font-bold px-5 py-2.5 rounded-full transition shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95">
+                <button onclick="openModal()" class="bg-white text-black hover:bg-gray-200 text-sm font-bold px-5 py-2.5 rounded-full transition shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95">
                     Start Free
                 </button>
             </div>
@@ -147,7 +152,7 @@
             </p>
             
             <div class="flex flex-col sm:flex-row justify-center gap-4 w-full sm:w-auto px-4 sm:px-0">
-                <button class="group relative w-full sm:w-auto bg-violet-600 text-white font-bold px-8 py-4 rounded-xl transition hover:bg-violet-500 shadow-[0_0_20px_rgba(124,58,237,0.4)] overflow-hidden">
+                <button onclick="openModal()" class="group relative w-full sm:w-auto bg-violet-600 text-white font-bold px-8 py-4 rounded-xl transition hover:bg-violet-500 shadow-[0_0_20px_rgba(124,58,237,0.4)] overflow-hidden">
                     <span class="relative z-10">Start 14-Day Free Trial</span>
                     <div class="absolute inset-0 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-violet-600 opacity-0 group-hover:opacity-100 transition duration-500"></div>
                 </button>
@@ -342,7 +347,7 @@
                         <li class="flex items-center gap-3"><span class="w-5 h-5 rounded-full bg-violet-500/20 text-violet-400 flex items-center justify-center text-xs">✓</span> Advanced Analytics</li>
                         <li class="flex items-center gap-3"><span class="w-5 h-5 rounded-full bg-violet-500/20 text-violet-400 flex items-center justify-center text-xs">✓</span> Priority Support</li>
                     </ul>
-                    <button class="w-full py-4 bg-violet-600 hover:bg-violet-500 rounded-xl text-white font-bold transition shadow-lg hover:shadow-violet-500/25">Start Free Trial</button>
+                    <button onclick="openModal()" class="w-full py-4 bg-violet-600 hover:bg-violet-500 rounded-xl text-white font-bold transition shadow-lg hover:shadow-violet-500/25">Start Free Trial</button>
                 </div>
 
                 <div class="glass-card p-8 rounded-3xl border border-white/5">
@@ -374,6 +379,57 @@
             </div>
         </div>
     </footer>
+
+    <div id="trialModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        
+        <div class="relative z-10 w-full h-full md:w-[700px] md:h-[85vh] mx-auto mt-0 md:mt-12 p-4 animate-fade-in-up">
+            <div class="bg-[#121212] h-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl flex flex-col relative">
+                
+                <div class="p-4 border-b border-white/10 flex justify-between items-center bg-[#18181b]">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-violet-500 animate-pulse"></span>
+                        <span class="font-bold text-white text-sm">Start Your Free Trial</span>
+                    </div>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-white hover:bg-white/10 rounded-full p-1.5 transition">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="flex-1 bg-white relative">
+                     <iframe 
+                        src="https://docs.google.com/forms/d/e/1FAIpQLSfD_KkZz9J7e8w8G1y4y1G7z8w8G1y4y1G7z8w8G1y4y1/viewform?embedded=true" 
+                        class="absolute inset-0 w-full h-full border-0" 
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0">
+                        Loading Form...
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('trialModal');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Kunci scroll background
+        }
+        
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Lepas kunci scroll background
+        }
+
+        // Tutup modal jika tombol ESC ditekan
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+    </script>
 
 </body>
 </html>
